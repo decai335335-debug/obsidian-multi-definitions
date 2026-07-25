@@ -1,0 +1,25 @@
+{
+  "name": "obsidian-multi-definitions",
+  "version": "1.0.0",
+  "description": "Multiple personal definitions for terms across Obsidian notes.",
+  "main": "main.js",
+  "scripts": {
+    "build": "node esbuild.config.mjs production",
+    "check": "tsc --noEmit",
+    "dist": "npm run check && npm run build && node --check main.js"
+  },
+  "author": "decai335335-debug",
+  "license": "MIT",
+  "type": "module",
+  "dependencies": {
+    "@codemirror/state": "^6.5.2",
+    "@codemirror/view": "^6.38.6"
+  },
+  "devDependencies": {
+    "@types/node": "^24.13.2",
+    "esbuild": "^0.28.0",
+    "obsidian": "^1.13.0",
+    "typescript": "^6.0.3"
+  }
+}
+

@@ -1,0 +1,200 @@
+.multi-def-term {
+  border-radius: 0.22em;
+  box-decoration-break: clone;
+  cursor: pointer;
+  padding: 0 0.08em;
+  -webkit-box-decoration-break: clone;
+}
+
+body.multi-def-bold .multi-def-term {
+  font-weight: 700;
+}
+
+body.multi-def-highlight .multi-def-term {
+  background: color-mix(in srgb, var(--multi-def-highlight-color, #ffd43b) 42%, transparent);
+}
+
+body.multi-def-text-color .multi-def-term {
+  color: var(--multi-def-text-color, #1f2937);
+}
+
+body.multi-def-underline .multi-def-term {
+  text-decoration: underline;
+  text-decoration-color: var(--multi-def-highlight-color, #ffd43b);
+  text-decoration-thickness: 0.12em;
+  text-underline-offset: 0.16em;
+}
+
+.multi-def-term:focus-visible,
+.multi-def-term:hover {
+  outline: 2px solid color-mix(in srgb, var(--interactive-accent) 65%, transparent);
+  outline-offset: 1px;
+}
+
+.multi-def-text-wrapper {
+  display: inline;
+}
+
+.multi-def-hover-card {
+  background: var(--background-primary);
+  border: 1px solid var(--background-modifier-border-hover);
+  border-radius: var(--radius-m);
+  box-shadow: var(--shadow-l);
+  cursor: pointer;
+  left: var(--multi-def-card-left, 12px);
+  max-height: min(460px, calc(100vh - 24px));
+  max-width: min(420px, calc(100vw - 24px));
+  overflow: auto;
+  padding: 14px;
+  position: fixed;
+  top: var(--multi-def-card-top, 12px);
+  width: 420px;
+  z-index: var(--layer-popover, 1000);
+}
+
+.multi-def-hover-card h3 {
+  margin: 0 0 4px;
+}
+
+.multi-def-hover-definition {
+  border-top: 1px solid var(--background-modifier-border);
+  margin-top: 10px;
+  padding-top: 10px;
+}
+
+.multi-def-hover-definition .multi-def-rendered-content {
+  margin-top: 5px;
+}
+
+.multi-def-modal .modal-content {
+  overflow: auto;
+}
+
+.multi-def-modal-summary,
+.multi-def-manager-toolbar,
+.multi-def-definition-header,
+.multi-def-definition-actions {
+  align-items: center;
+  display: flex;
+}
+
+.multi-def-modal-summary,
+.multi-def-manager-toolbar,
+.multi-def-definition-header {
+  justify-content: space-between;
+}
+
+.multi-def-modal-summary {
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.multi-def-definition-card {
+  background: var(--background-secondary);
+  border: 1px solid var(--background-modifier-border);
+  border-radius: var(--radius-m);
+  margin: 10px 0;
+  padding: 12px;
+}
+
+.multi-def-definition-header {
+  gap: 8px;
+}
+
+.multi-def-definition-header h3 {
+  margin: 0;
+}
+
+.multi-def-definition-actions {
+  gap: 4px;
+}
+
+.multi-def-rendered-content > :first-child {
+  margin-top: 8px;
+}
+
+.multi-def-rendered-content > :last-child {
+  margin-bottom: 0;
+}
+
+.multi-def-aliases,
+.multi-def-count {
+  color: var(--text-muted);
+  font-size: var(--font-ui-smaller);
+}
+
+.multi-def-editor-label {
+  color: var(--text-normal);
+  display: block;
+  font-weight: var(--font-semibold);
+  margin: 16px 0 6px;
+}
+
+.multi-def-editor-content {
+  min-height: min(38vh, 360px);
+  resize: vertical;
+  width: 100%;
+}
+
+.multi-def-manager-toolbar {
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.multi-def-manager-toolbar input {
+  flex: 1 1 auto;
+}
+
+.multi-def-term-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.multi-def-term-row {
+  align-items: center;
+  background: var(--background-secondary);
+  border: 1px solid var(--background-modifier-border);
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 12px;
+  text-align: left;
+  width: 100%;
+}
+
+.multi-def-term-row:hover {
+  background: var(--background-modifier-hover);
+}
+
+.multi-def-term-row .multi-def-count {
+  background: var(--background-modifier-border);
+  border-radius: 999px;
+  min-width: 24px;
+  padding: 2px 7px;
+  text-align: center;
+}
+
+.multi-def-empty {
+  color: var(--text-muted);
+  padding: 24px;
+  text-align: center;
+}
+
+@media (max-width: 600px) {
+  .multi-def-hover-card {
+    display: none;
+  }
+
+  .multi-def-modal {
+    width: calc(100vw - 24px);
+  }
+
+  .multi-def-manager-toolbar {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .multi-def-term {
+    padding: 0.06em 0.12em;
+  }
+}
