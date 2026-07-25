@@ -1,6 +1,6 @@
 {
   "name": "obsidian-multi-definitions",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Multiple personal definitions for terms across Obsidian notes.",
   "main": "main.js",
   "scripts": {
@@ -22,4 +22,3 @@
     "typescript": "^6.0.3"
   }
 }
-

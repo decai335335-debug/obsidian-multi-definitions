@@ -1,11 +1,10 @@
 {
   "id": "multi-definitions",
   "name": "Multi Definitions",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "minAppVersion": "1.13.0",
   "description": "Save multiple explanations for terms and preview them by hover or tap across your notes.",
   "author": "decai335335-debug",
   "authorUrl": "https://github.com/decai335335-debug",
   "isDesktopOnly": false
 }
-

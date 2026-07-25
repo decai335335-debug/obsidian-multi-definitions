@@ -303,11 +303,33 @@ export default class MultiDefinitionsPlugin extends Plugin {
   }
 
   async updateSetting(key: keyof MultiDefinitionsSettings, value: unknown): Promise<void> {
-    if (["bold", "caseSensitive", "enableHighlight", "enableTextColor", "hoverPreview", "underline"].includes(key)) {
-      this.settings[key] = Boolean(value) as never;
-    } else if (key === "highlightColor" || key === "textColor") {
-      const color = typeof value === "string" && /^#[0-9a-f]{6}$/i.test(value) ? value : DEFAULT_SETTINGS[key];
-      this.settings[key] = color as never;
+    switch (key) {
+      case "bold":
+        this.settings.bold = Boolean(value);
+        break;
+      case "caseSensitive":
+        this.settings.caseSensitive = Boolean(value);
+        break;
+      case "enableHighlight":
+        this.settings.enableHighlight = Boolean(value);
+        break;
+      case "enableTextColor":
+        this.settings.enableTextColor = Boolean(value);
+        break;
+      case "hoverPreview":
+        this.settings.hoverPreview = Boolean(value);
+        break;
+      case "underline":
+        this.settings.underline = Boolean(value);
+        break;
+      case "highlightColor":
+        this.settings.highlightColor =
+          typeof value === "string" && /^#[0-9a-f]{6}$/i.test(value) ? value : DEFAULT_SETTINGS.highlightColor;
+        break;
+      case "textColor":
+        this.settings.textColor =
+          typeof value === "string" && /^#[0-9a-f]{6}$/i.test(value) ? value : DEFAULT_SETTINGS.textColor;
+        break;
     }
     this.data.settings = { ...this.settings };
     await this.persistAndRefresh();
@@ -392,7 +414,7 @@ export default class MultiDefinitionsPlugin extends Plugin {
         }
         continue;
       }
-      if (child instanceof HTMLElement) {
+      if (child.instanceOf(HTMLElement)) {
         if (SKIPPED_ELEMENTS.has(child.tagName) || child.hasClass(MARK_CLASS)) {
           continue;
         }
