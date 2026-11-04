@@ -526,14 +526,21 @@ export default class MultiDefinitionsPlugin extends Plugin {
   }
 
   private async loadSyncedData(fallback: DictionaryData): Promise<DictionaryData> {
-    const file = this.app.vault.getAbstractFileByPath(normalizePath(DATA_FILE));
-    if (!(file instanceof TFile)) {
+    let raw: string | null;
+    try {
+      raw = await this.readSyncedFile();
+    } catch (error) {
+      console.error("Could not load synchronized definitions.", error);
+      new Notice("Definitions file could not be read; using the local backup.");
+      return fallback;
+    }
+    if (raw === null) {
       this.data = fallback;
       await this.persistData();
       return fallback;
     }
     try {
-      return normalizeData(JSON.parse(await this.app.vault.cachedRead(file)) as unknown);
+      return normalizeData(JSON.parse(raw) as unknown);
     } catch (error) {
       console.error("Could not load synchronized definitions.", error);
       new Notice("Definitions file could not be read; using the local backup.");
@@ -541,14 +548,24 @@ export default class MultiDefinitionsPlugin extends Plugin {
     }
   }
 
+  private async readSyncedFile(): Promise<string | null> {
+    const path = normalizePath(DATA_FILE);
+    const file = this.app.vault.getAbstractFileByPath(path);
+    if (file instanceof TFile) {
+      return this.app.vault.cachedRead(file);
+    }
+    const adapter = this.app.vault.adapter;
+    return (await adapter.exists(path)) ? adapter.read(path) : null;
+  }
+
   private async reloadSyncedData(): Promise<void> {
     await this.saveQueue;
-    const file = this.app.vault.getAbstractFileByPath(normalizePath(DATA_FILE));
-    if (!(file instanceof TFile)) {
-      return;
-    }
     try {
-      this.data = normalizeData(JSON.parse(await this.app.vault.cachedRead(file)) as unknown);
+      const raw = await this.readSyncedFile();
+      if (raw === null) {
+        return;
+      }
+      this.data = normalizeData(JSON.parse(raw) as unknown);
       this.settings = { ...this.data.settings };
       this.refreshAll();
     } catch (error) {
@@ -567,9 +584,17 @@ export default class MultiDefinitionsPlugin extends Plugin {
     const snapshot = normalizeData(this.data);
     this.saveQueue = this.saveQueue
       .then(async () => {
+        const adapter = this.app.vault.adapter;
         const folder = normalizePath(DATA_FOLDER);
-        if (!this.app.vault.getAbstractFileByPath(folder)) {
-          await this.app.vault.createFolder(folder);
+        // The vault index may not be populated yet at startup, so check the disk too.
+        if (!this.app.vault.getAbstractFileByPath(folder) && !(await adapter.exists(folder))) {
+          try {
+            await this.app.vault.createFolder(folder);
+          } catch (error) {
+            if (!(await adapter.exists(folder))) {
+              throw error;
+            }
+          }
         }
         const path = normalizePath(DATA_FILE);
         const content = `${JSON.stringify(snapshot, null, 2)}\n`;
@@ -577,7 +602,7 @@ export default class MultiDefinitionsPlugin extends Plugin {
         if (file instanceof TFile) {
           await this.app.vault.modify(file, content);
         } else {
-          await this.app.vault.create(path, content);
+          await adapter.write(path, content);
         }
         await this.saveData(snapshot);
       })
